@@ -32,6 +32,24 @@ bool isFileContainsSortedArray(const std::string& fileName)
 
 }
 
+bool createFileWithRandomNumbers(const std::string& fileName, const int numbersCount, const int maxNumberValue)
+{
+	ofstream File(fileName);
+
+	if (!File.is_open())
+	{
+		cout << "Error: file is not open!" << endl;
+		return 0;
+	}
+
+	for (int i = 0; i < numbersCount; i++)
+	{
+		File << rand() % (maxNumberValue + 1) << ' ';
+	}
+	return 1;
+
+}
+
 
 int main()
 {
