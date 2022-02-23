@@ -207,6 +207,58 @@ void merge(const string& fileName1, const string& fileName2, const string& fileN
 
 }
 
+void SortFile(const string& fileName)
+{
+	int numbersCount, maxNumberValue;
+	cout << "enter count of numbers:	";
+	cin >> numbersCount;
+	cout << "\nenter max number value:	";
+	cin >> maxNumberValue;
+
+	createFileWithRandomNumbers(fileName, numbersCount, maxNumberValue);
+	cout << endl;
+	cout << "origin ";
+	PrintFile(fileName);
+	cout << endl;
+
+	ifstream f(fileName);
+	ofstream f1("file1.txt");
+	ofstream f2("file2.txt");
+	ofstream f3("file3.txt");
+	ofstream f4("file4.txt");
+
+
+	int p = 1;
+	splitting(fileName, "file1.txt", "file2.txt", p);
+
+	f.close();
+	f1.close();
+	f2.close();
+	f3.close();
+	f4.close();
+
+	while (true)
+	{
+		ifstream f2("file2.txt");
+
+		if (f2.peek() == EOF)
+		{
+			f2.close();
+			break;
+		}
+		f2.close();
+
+		merge("file3.txt", "file4.txt", "file1.txt", "file2.txt", p);
+
+		p = 2 * p;
+
+		merge("file1.txt", "file2.txt", "file3.txt", "file4.txt", p);
+
+		p = 2 * p;
+	}
+
+}
+
 int main()
 {		
 	
