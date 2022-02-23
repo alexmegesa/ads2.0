@@ -66,6 +66,7 @@ bool createFileWithRandomNumbers(const std::string& fileName, const int numbersC
 
 }
 
+
 void splitting(const string& fileName1, const string& fileName2, const string& fileName3, int p)
 {
 	ifstream f1(fileName1);
@@ -209,18 +210,7 @@ void merge(const string& fileName1, const string& fileName2, const string& fileN
 
 void SortFile(const string& fileName)
 {
-	int numbersCount, maxNumberValue;
-	cout << "enter count of numbers:	";
-	cin >> numbersCount;
-	cout << "\nenter max number value:	";
-	cin >> maxNumberValue;
-
-	createFileWithRandomNumbers(fileName, numbersCount, maxNumberValue);
-	cout << endl;
-	cout << "origin ";
-	PrintFile(fileName);
-	cout << endl;
-
+	
 	ifstream f(fileName);
 	ofstream f1("file1.txt");
 	ofstream f2("file2.txt");
@@ -259,10 +249,23 @@ void SortFile(const string& fileName)
 
 }
 
+int createAndSortFile(const std::string& fileName, const int numbersCount, const int maxNumberValue)
+{
+	if (!createFileWithRandomNumbers(fileName, numbersCount, maxNumberValue)) {
+		return -1;
+	}
+
+	SortFile(fileName); 
+
+	if (!isFileContainsSortedArray(fileName)) {
+		return -2;
+	}
+
+	return 1;
+}
+
 int main()
 {		
 	
-	createFileWithRandomNumbers("file.txt", 10, 10);
-
-	PrintFile("file.txt");
+	
 }
