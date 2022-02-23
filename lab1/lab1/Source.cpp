@@ -5,6 +5,22 @@
 
 using namespace std;
 
+
+
+void PrintFile(const std::string& fileName)
+{
+	ifstream file(fileName);
+	int value;
+
+	cout << "file content: ";
+
+	while (!file.eof())
+	{
+		file >> value;
+		cout << value << ' ';
+	}
+}
+
 bool isFileContainsSortedArray(const std::string& fileName)
 {
 	ifstream File(fileName);
@@ -194,5 +210,7 @@ void merge(const string& fileName1, const string& fileName2, const string& fileN
 int main()
 {		
 	
+	createFileWithRandomNumbers("file.txt", 10, 10);
 
+	PrintFile("file.txt");
 }
