@@ -217,7 +217,7 @@ void SortFile(const string& fileName)
 	ofstream f3("file3.txt");
 	ofstream f4("file4.txt");
 
-
+	int value = 0;
 	int p = 1;
 	splitting(fileName, "file1.txt", "file2.txt", p);
 
@@ -245,7 +245,22 @@ void SortFile(const string& fileName)
 		merge("file1.txt", "file2.txt", "file3.txt", "file4.txt", p);
 
 		p = 2 * p;
+
+		
 	}
+	
+	
+	
+	ifstream newFile("file1.txt");
+	ofstream newFile1(fileName);
+	
+	int number;
+	while (!newFile.eof())
+	{
+		newFile >> number;
+		newFile1 << number << ' ';
+	}
+	
 
 }
 
@@ -265,7 +280,29 @@ int createAndSortFile(const std::string& fileName, const int numbersCount, const
 }
 
 int main()
-{		
-	
-	
+{	
+	srand(time(0));
+	std::string fileName = "file.txt";
+	const int numbersCount = 1000000;
+	const int maxNumberValue = 100000;
+
+	for (int i = 0; i < 10; i++)
+	{
+		switch (createAndSortFile(fileName, numbersCount, maxNumberValue))
+		{
+		case 1:
+			std::cout << "Test passed." << std::endl;
+			break;
+
+		case -1:
+			std::cout << "Test failed: can't create file." << std::endl;
+			break;
+
+		case -2:
+			std::cout << "Test failed: file isn't sorted." << std::endl;
+			break;
+		}
+
+	}
+	return 0;
 }
