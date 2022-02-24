@@ -73,6 +73,11 @@ void splitting(const string& fileName1, const string& fileName2, const string& f
 	ofstream f2(fileName2);
 	ofstream f3(fileName3);
 
+	if (!f1.is_open() || !f2.is_open() || !f3.is_open())
+	{
+		cout << "Error: file is not open!" << endl;
+		return;
+	}
 
 	int n = 0, i, x;
 	
@@ -111,6 +116,12 @@ void merge(const string& fileName1, const string& fileName2, const string& fileN
 	ofstream f2(fileName2);
 	ifstream f3(fileName3);
 	ifstream f4(fileName4);
+
+	if (!f1.is_open() || !f2.is_open() || !f3.is_open() || !f4.is_open())
+	{
+		cout << "Error: file is not open!" << endl;
+		return;
+	}
 
 	f3 >> x;
 	f4 >> y;
@@ -217,6 +228,13 @@ void SortFile(const string& fileName)
 	ofstream f3("file3.txt");
 	ofstream f4("file4.txt");
 
+	if (!f1.is_open() || !f2.is_open() || !f3.is_open() || !f4.is_open())
+	{
+		cout << "Error: file is not open!" << endl;
+		return;
+	}
+
+
 	int value = 0;
 	int p = 1;
 	splitting(fileName, "file1.txt", "file2.txt", p);
@@ -253,6 +271,12 @@ void SortFile(const string& fileName)
 	
 	ifstream newFile("file1.txt");
 	ofstream newFile1(fileName);
+
+	if (!newFile.is_open() || !newFile1.is_open())
+	{
+		cout << "Error: file is not open!" << endl;
+		return;
+	}
 	
 	int number;
 	while (!newFile.eof())
