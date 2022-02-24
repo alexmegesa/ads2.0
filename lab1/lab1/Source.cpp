@@ -26,7 +26,7 @@ bool isFileContainsSortedArray(const std::string& fileName)
 	ifstream File(fileName);
 	if (!File.is_open())
 	{
-		cout << "Error: file is not open!" << endl;
+		cerr << "Error: file is not open!" << endl;
 		return 0;
 	}
 
@@ -54,7 +54,7 @@ bool createFileWithRandomNumbers(const std::string& fileName, const int numbersC
 
 	if (!File.is_open())
 	{
-		cout << "Error: file is not open!" << endl;
+		cerr << "Error: file is not open!" << endl;
 		return 0;
 	}
 
@@ -75,7 +75,7 @@ void splitting(const string& fileName1, const string& fileName2, const string& f
 
 	if (!f1.is_open() || !f2.is_open() || !f3.is_open())
 	{
-		cout << "Error: file is not open!" << endl;
+		cerr << "Error: file is not open!" << endl;
 		return;
 	}
 
@@ -119,14 +119,14 @@ void merge(const string& fileName1, const string& fileName2, const string& fileN
 
 	if (!f1.is_open() || !f2.is_open() || !f3.is_open() || !f4.is_open())
 	{
-		cout << "Error: file is not open!" << endl;
+		cerr << "Error: file is not open!" << endl;
 		return;
 	}
 
 	f3 >> x;
 	f4 >> y;
 
-	int n = 0, k = 0;
+	int n = 0;
 	while (!f3.eof() && !f4.eof())
 	{
 		i = j = 0;
@@ -230,12 +230,11 @@ void SortFile(const string& fileName)
 
 	if (!f1.is_open() || !f2.is_open() || !f3.is_open() || !f4.is_open())
 	{
-		cout << "Error: file is not open!" << endl;
+		cerr << "Error: file is not open!" << endl;
 		return;
 	}
 
 
-	int value = 0;
 	int p = 1;
 	splitting(fileName, "file1.txt", "file2.txt", p);
 
@@ -274,7 +273,7 @@ void SortFile(const string& fileName)
 
 	if (!newFile.is_open() || !newFile1.is_open())
 	{
-		cout << "Error: file is not open!" << endl;
+		cerr << "Error: file is not open!" << endl;
 		return;
 	}
 	
