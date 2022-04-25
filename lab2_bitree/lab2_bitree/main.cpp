@@ -23,5 +23,8 @@ int main()
 		bt.printLevel(i);
 		cout << endl;
 	}
+
+	cout << endl << endl << endl;
+	cout << bt.countNodes();
 	
 }

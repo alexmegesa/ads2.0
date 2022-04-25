@@ -24,14 +24,27 @@ private:
 
 public:
 	BinaryTree() = default;						   //конструктор по умолчанию (нулевой птр корня)
+	~BinaryTree();								   //деструктор
 
 	Node* getRoot();							   //вернуть корень дерева
 	Node* addNode(Node *startNode, const int key); //добавление узла в дерево
-
+	void deleteSubTree(Node *subTreeRoot);		   //удаление поддерева
+	void clearingTree();						   //очистка дерева
+	bool isEmpty();								   //проверка на пустоту дерева
+	int height(Node* subTreeRoot);				   //высота поддерева
+	int height();								   //высота дерева
+	int countNodes(Node* subTreeRoot);			   //количество узлов
+	int countNodes();							   //количество узлов
+	
+	bool deleteOnKey();                            //удаление узла по ключу
+		
 	void printHorizontal();
 	void printHorizontal(Node* startNode, const int level = 0);
 
 	void printLevel(const int level);
 	void printLevel(Node* startNode, const int level, const int currentLevel = 0);
+
+
+
 };
 

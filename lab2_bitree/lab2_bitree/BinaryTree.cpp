@@ -1,6 +1,11 @@
 #include "BinaryTree.h"
 #include <random>
 
+BinaryTree::~BinaryTree()
+{
+	deleteSubTree(m_root);
+}
+
 Node* BinaryTree::getRoot()
 {
 	return m_root;
@@ -43,6 +48,75 @@ Node* BinaryTree::addNode(Node* startNode, const int key)
 			return addNode(startNode->rightChild, key);
 		}
 	}
+}
+
+void BinaryTree::deleteSubTree(Node* subTreeRoot)
+{
+	if (subTreeRoot)
+	{
+		deleteSubTree(subTreeRoot->leftChild);
+		deleteSubTree(subTreeRoot->rightChild);
+		delete subTreeRoot;
+		if (subTreeRoot == m_root)
+		{
+			m_root = nullptr;
+		}
+	}
+}
+
+void BinaryTree::clearingTree()
+{	
+	deleteSubTree(m_root);
+}
+
+bool BinaryTree::isEmpty()
+{
+	return m_root == nullptr;
+}
+
+int BinaryTree::height(Node *subTreeRoot)
+{	
+	if (subTreeRoot)
+	{
+		int left = height(subTreeRoot->leftChild);
+		int right = height(subTreeRoot->rightChild);
+
+		if (left > right)
+			return left + 1;
+		else
+			return right + 1;
+	}
+
+	return 0;
+
+}
+
+int BinaryTree::height()
+{
+	return height(m_root);
+}
+
+int BinaryTree::countNodes(Node* subTreeRoot)
+{
+	int count = 0;
+
+	if (subTreeRoot)
+	{	
+		count++;
+		count += countNodes(subTreeRoot->leftChild);
+		count += countNodes(subTreeRoot->rightChild);
+		return count;
+		
+	}
+
+	return 0;
+
+	
+}
+
+int BinaryTree::countNodes()
+{
+	return countNodes(m_root);
 }
 
 void BinaryTree::printHorizontal()
