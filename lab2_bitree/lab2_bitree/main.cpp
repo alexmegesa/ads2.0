@@ -28,5 +28,11 @@ int main()
 	
 	bt.deleteNode(bt.indexNode(2));
 	bt.printHorizontal();
+
+	std::vector<int> keys(bt.getAllKeys());
+	for (int key : keys)
+	{
+		std::cout << key << " ";
+	}
 	
 }

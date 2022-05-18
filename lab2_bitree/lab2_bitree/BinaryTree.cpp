@@ -389,6 +389,47 @@ Node* BinaryTree::indexNode(const int nodeIndex)
 	return indexNode(m_root, nodeIndex);
 }
 
+vector<int> BinaryTree::getAllKeys(Node* subTreeRoot)
+{
+	if (subTreeRoot == nullptr)
+		return std::vector<int>();
+
+	vector<int> keys;
+	vector<Node*> currentLevelNodes;
+	currentLevelNodes.push_back(subTreeRoot);
+	keys.push_back(subTreeRoot->getKey());
+
+	while (currentLevelNodes.size() != 0)
+	{
+		vector<Node*> nextLevelNodes;
+		nextLevelNodes.reserve(currentLevelNodes.size() * 2);
+
+		for (Node* node : currentLevelNodes)
+		{
+			if (node->leftChild)
+			{
+				nextLevelNodes.push_back(node->leftChild);
+				keys.push_back(node->leftChild->getKey());
+			}
+
+			if (node->rightChild)
+			{
+				nextLevelNodes.push_back(node->rightChild);
+				keys.push_back(node->rightChild->getKey());
+			}
+		}
+
+		currentLevelNodes.swap(nextLevelNodes);
+	}
+
+	return keys;
+}
+
+vector<int> BinaryTree::getAllKeys()
+{
+	return getAllKeys(m_root);
+}
+
 
 void BinaryTree::printHorizontal()
 {

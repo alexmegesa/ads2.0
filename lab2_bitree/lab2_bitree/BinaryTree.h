@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 struct Node
@@ -45,13 +46,15 @@ public:
 	bool deleteNode(Node* nodeToDelete);                     //удаление узла по ключу
 	Node* indexNode(Node* subTreeRoot, int nodeIndex);		 //поиск узла по индексу
 	Node* indexNode(const int nodeIndex);					 //поиск узла по индексу
+	vector<int> getAllKeys(Node* subTreeRoot);
+	vector<int> getAllKeys();
 		
 	void printHorizontal();
 	void printHorizontal(Node* startNode, const int level = 0);
 
 	void printLevel(const int level);
 	void printLevel(Node* startNode, const int level, const int currentLevel = 0);
-
+	
 
 
 };
