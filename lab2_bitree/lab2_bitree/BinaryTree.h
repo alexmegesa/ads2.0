@@ -12,6 +12,8 @@ struct Node
 		this->rightChild = rightChild;
 	}
 
+	int getKey() { return key; };
+
 	int key;
 	Node *leftChild = nullptr;
 	Node *rightChild = nullptr;
@@ -35,8 +37,14 @@ public:
 	int height();								   //высота дерева
 	int countNodes(Node* subTreeRoot);			   //количество узлов
 	int countNodes();							   //количество узлов
-	
-	bool deleteOnKey();                            //удаление узла по ключу
+
+
+	Node* findParentByKey(Node* subTreeRoot, const int key); //поиск родителя по ключу узла
+	Node* findParentByKey(const int key);					 //поиск родителя по ключу узла
+	Node* emptyNodeChild(Node* subTreeRoot);			     //поиск узла с пустым ребенком
+	bool deleteNode(Node* nodeToDelete);                     //удаление узла по ключу
+	Node* indexNode(Node* subTreeRoot, int nodeIndex);		 //поиск узла по индексу
+	Node* indexNode(const int nodeIndex);					 //поиск узла по индексу
 		
 	void printHorizontal();
 	void printHorizontal(Node* startNode, const int level = 0);

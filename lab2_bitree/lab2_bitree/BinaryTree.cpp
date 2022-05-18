@@ -119,6 +119,277 @@ int BinaryTree::countNodes()
 	return countNodes(m_root);
 }
 
+Node* BinaryTree::findParentByKey(Node* subTreeRoot, const int key)
+{
+	if (m_root->key == key)
+	{
+		return nullptr;
+	}
+
+	if (subTreeRoot)
+	{
+		if (subTreeRoot->leftChild && subTreeRoot->rightChild)
+		{
+			if (subTreeRoot->leftChild->getKey() == key || subTreeRoot->rightChild->getKey())
+			{
+				return subTreeRoot;
+			}
+			else
+			{
+				Node* left = findParentByKey(subTreeRoot->leftChild, key);
+				Node* right = findParentByKey(subTreeRoot->rightChild, key);
+
+				if (left)
+					return left;
+
+				if (right)
+					return right;
+
+
+			}
+		}
+	}
+
+
+
+	return nullptr;
+}
+
+Node* BinaryTree::findParentByKey(const int key)
+{
+	return findParentByKey(m_root, key);
+}
+
+Node* BinaryTree::emptyNodeChild(Node* subTreeRoot)
+{
+	if (subTreeRoot == nullptr)
+	{
+		cerr << "error: Tree is empty";
+	}
+
+	if (subTreeRoot->leftChild == nullptr || subTreeRoot->rightChild == nullptr)
+	{
+		return subTreeRoot;
+	}
+
+	else
+	{
+		int heightLeft = height(subTreeRoot->leftChild);
+		int heightRight = height(subTreeRoot->rightChild);
+
+		if (heightLeft < heightRight)
+		{
+			return emptyNodeChild(subTreeRoot->leftChild);
+		}
+
+		else if (heightLeft > heightRight)
+		{
+			return emptyNodeChild(subTreeRoot->rightChild);
+		}
+
+		else
+		{
+			int countLeft = countNodes(subTreeRoot->leftChild);
+			int countRight = countNodes(subTreeRoot->rightChild);
+			if (countLeft < countRight)
+			{
+				return emptyNodeChild(subTreeRoot->leftChild);
+			}
+			else
+			{
+				return emptyNodeChild(subTreeRoot->rightChild);
+			}
+		}
+	}
+}
+
+bool BinaryTree::deleteNode(Node* nodeToDelete)
+{
+	if (nodeToDelete->leftChild == nullptr && nodeToDelete->rightChild == nullptr)
+	{
+		Node* parent = findParentByKey(nodeToDelete->getKey());
+
+		if (parent)
+		{
+			if (parent->leftChild == nodeToDelete)
+			{
+				parent->leftChild == nullptr;
+			}
+			if (parent->rightChild == nodeToDelete)
+			{
+				parent->rightChild == nullptr;
+			}
+		}
+		else
+		{
+			m_root == nullptr;
+		}
+
+		delete nodeToDelete;
+
+		return true;
+
+	}
+
+	if (nodeToDelete->leftChild == nullptr && nodeToDelete->rightChild != nullptr)
+	{
+		Node* parent = findParentByKey(nodeToDelete->getKey());
+
+		if (parent)
+		{
+			if (parent->leftChild == nodeToDelete)
+				parent->leftChild = nodeToDelete->rightChild;
+
+			if (parent->rightChild == nodeToDelete)
+				parent->rightChild = nodeToDelete->rightChild;
+		}
+
+		else
+		{
+			m_root = nodeToDelete->rightChild;
+		}
+
+		delete nodeToDelete;
+
+		return true;
+	}
+
+	if (nodeToDelete->leftChild != nullptr && nodeToDelete->rightChild == nullptr)
+	{
+		Node* parent = findParentByKey(nodeToDelete->getKey());
+
+		if (parent)
+		{
+			if (parent->leftChild == nodeToDelete)
+				parent->leftChild = nodeToDelete->leftChild;
+
+			if (parent->rightChild == nodeToDelete)
+				parent->rightChild = nodeToDelete->leftChild;
+		}
+
+		else
+		{
+			m_root = nodeToDelete->leftChild;
+		}
+
+		delete nodeToDelete;
+
+		return true;
+	}
+
+	if (nodeToDelete->leftChild != nullptr && nodeToDelete->rightChild != nullptr)
+	{
+		Node* parent = findParentByKey(nodeToDelete->getKey());
+
+		if (parent)
+		{
+			if (parent->leftChild == nodeToDelete)
+			{
+				parent->leftChild = nodeToDelete->leftChild;
+				Node* nodeWithEmptyChild = emptyNodeChild(parent);
+
+				if (nodeWithEmptyChild->rightChild == nullptr)
+				{
+					nodeWithEmptyChild->rightChild = nodeToDelete->rightChild;
+				}
+				else
+				{
+					nodeWithEmptyChild->leftChild = nodeToDelete->rightChild;
+				}
+
+			}
+
+			if (parent->rightChild == nodeToDelete)
+			{
+				parent->rightChild = nodeToDelete->rightChild;
+				Node* nodeWithEmptyChild = emptyNodeChild(parent);
+
+				if (nodeWithEmptyChild->leftChild == nullptr)
+				{
+					nodeWithEmptyChild->leftChild = nodeToDelete->leftChild;
+				}
+				else
+				{
+					nodeWithEmptyChild->rightChild = nodeToDelete->leftChild;
+				}
+			}
+		}
+		else
+		{
+			m_root = nodeToDelete->leftChild;
+			Node* nodeWithEmptyChild = emptyNodeChild(m_root);
+
+			if (nodeWithEmptyChild->rightChild == nullptr)
+			{
+				nodeWithEmptyChild->rightChild = nodeToDelete->rightChild;
+			}
+
+			else
+			{
+				nodeWithEmptyChild->leftChild = nodeToDelete->rightChild;
+			}
+		}
+
+		delete nodeToDelete;
+
+		return true;
+	}
+	return false;
+}
+
+Node* BinaryTree::indexNode(Node* subTreeRoot, int nodeIndex)
+{
+	if (nodeIndex == 0)
+	{
+		return subTreeRoot;
+	}
+
+	else if (subTreeRoot == nullptr)
+	{
+		return nullptr;
+	}
+
+	std::vector<Node*> currentLevelNodes;
+	currentLevelNodes.push_back(subTreeRoot);
+
+	while (currentLevelNodes.size() != 0 && nodeIndex >= currentLevelNodes.size())
+	{
+		std::vector<Node*> nextLevelNodes;
+		nextLevelNodes.reserve(currentLevelNodes.size() * 2);
+
+		for (Node* node : currentLevelNodes)
+		{
+			if (node->leftChild)
+			{
+				nextLevelNodes.push_back(node->leftChild);
+			}
+
+			if (node->rightChild)
+			{
+				nextLevelNodes.push_back(node->rightChild);
+			}
+		}
+
+		nodeIndex -= currentLevelNodes.size();
+		currentLevelNodes.swap(nextLevelNodes);
+	}
+
+	if (currentLevelNodes.size() == 0)
+	{
+		return nullptr;
+	}
+	else
+	{
+		return currentLevelNodes[nodeIndex];
+	}
+}
+
+Node* BinaryTree::indexNode(const int nodeIndex)
+{
+	return indexNode(m_root, nodeIndex);
+}
+
+
 void BinaryTree::printHorizontal()
 {
 	printHorizontal(m_root);

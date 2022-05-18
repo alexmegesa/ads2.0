@@ -25,6 +25,8 @@ int main()
 	}
 
 	cout << endl << endl << endl;
-	cout << bt.countNodes();
+	
+	bt.deleteNode(bt.indexNode(2));
+	bt.printHorizontal();
 	
 }
