@@ -128,7 +128,7 @@ Node* BinaryTree::findParentByKey(Node* subTreeRoot, const int key)
 
 	if (subTreeRoot)
 	{
-		if (subTreeRoot->leftChild && subTreeRoot->rightChild)
+		if (subTreeRoot->leftChild || subTreeRoot->rightChild)
 		{
 			if (subTreeRoot->leftChild->getKey() == key || subTreeRoot->rightChild->getKey())
 			{
