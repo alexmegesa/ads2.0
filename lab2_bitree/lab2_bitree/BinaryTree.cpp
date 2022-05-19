@@ -121,7 +121,7 @@ int BinaryTree::countNodes()
 
 Node* BinaryTree::findParentByKey(Node* subTreeRoot, const int key)
 {
-	if (m_root->key == key)
+	if (m_root->key == key && m_root)
 	{
 		return nullptr;
 	}
@@ -130,7 +130,7 @@ Node* BinaryTree::findParentByKey(Node* subTreeRoot, const int key)
 	{
 		if (subTreeRoot->leftChild || subTreeRoot->rightChild)
 		{
-			if (subTreeRoot->leftChild->getKey() == key || subTreeRoot->rightChild->getKey())
+			if ((subTreeRoot->leftChild && subTreeRoot->leftChild->getKey() == key) || (subTreeRoot->rightChild && subTreeRoot->rightChild->getKey()) == key)
 			{
 				return subTreeRoot;
 			}
@@ -158,6 +158,42 @@ Node* BinaryTree::findParentByKey(Node* subTreeRoot, const int key)
 Node* BinaryTree::findParentByKey(const int key)
 {
 	return findParentByKey(m_root, key);
+}
+
+Node* BinaryTree::findNodeByKey(Node* subTreeRoot, const int key)
+{
+	if (subTreeRoot)
+	{
+		if (subTreeRoot->getKey() == key)
+		{
+			return subTreeRoot;
+		}
+
+		else
+		{
+			Node* left = findNodeByKey(subTreeRoot->leftChild, key);
+			Node* right = findNodeByKey(subTreeRoot->rightChild, key);
+
+			if (left && left->getKey() == key)
+			{
+				return left;
+			}
+
+			if (right && right->getKey() == key)
+			{
+				return right;
+			}
+
+			return nullptr;
+		}
+	}
+
+	return nullptr;
+}
+
+Node* BinaryTree::findNodeByKey(const int key)
+{
+	return findNodeByKey(m_root, key);
 }
 
 Node* BinaryTree::emptyNodeChild(Node* subTreeRoot)
@@ -204,7 +240,15 @@ Node* BinaryTree::emptyNodeChild(Node* subTreeRoot)
 }
 
 bool BinaryTree::deleteNode(Node* nodeToDelete)
-{
+{	
+
+	if (nodeToDelete == nullptr)
+	{
+		cerr << "error: empty node" << endl;
+		return false;
+	}
+
+
 	if (nodeToDelete->leftChild == nullptr && nodeToDelete->rightChild == nullptr)
 	{
 		Node* parent = findParentByKey(nodeToDelete->getKey());
@@ -337,6 +381,17 @@ bool BinaryTree::deleteNode(Node* nodeToDelete)
 	return false;
 }
 
+bool BinaryTree::deleteNodeByKey(Node* subTreeRoot,const int key)
+{
+	Node* toDelete = findNodeByKey(subTreeRoot, key);
+	return deleteNode(toDelete);
+}
+
+bool BinaryTree::deleteNodeByKey(const int key)
+{
+	return deleteNodeByKey(m_root, key);
+}
+
 Node* BinaryTree::indexNode(Node* subTreeRoot, int nodeIndex)
 {
 	if (nodeIndex == 0)
@@ -457,6 +512,70 @@ void BinaryTree::printHorizontal(Node* startNode, const int level)
 
 }
 
+void BinaryTree::printVertical(Node* subTreeRoot)
+{
+	if (subTreeRoot == nullptr)
+	{
+		std::cout << "error printVertical: Tree is empty" << std::endl;
+		return;
+	}
+
+	std::vector<Node*> currentLevelNodes;
+	currentLevelNodes.push_back(subTreeRoot);
+	int significant = 1;
+	int level = 1;
+	int h = height(subTreeRoot);
+
+	while (significant != 0)
+	{
+		for (int i = 0; i < currentLevelNodes.size(); i++)
+		{
+			if (i == 0)
+				for (int j = 0; j < pow(2, h - level); j++)
+					std::cout << " ";
+			else
+				for (int j = 0; j < pow(2, h - level) + pow(2, h - level) - 1; j++)
+					std::cout << " ";
+
+			if (currentLevelNodes[i])
+				std::cout << currentLevelNodes[i]->getKey();
+			else
+				std::cout << "X";
+		}
+		std::cout << std::endl;
+
+		significant = 0;
+		std::vector<Node*> nextLevelNodes;
+		nextLevelNodes.reserve(currentLevelNodes.size() * 2);
+
+		for (Node* node : currentLevelNodes) {
+			if (node)
+			{
+				if (node->leftChild)
+					significant++;
+				if (node->rightChild)
+					significant++;
+
+				nextLevelNodes.push_back(node->leftChild);
+				nextLevelNodes.push_back(node->rightChild);
+			}
+			else
+			{
+				nextLevelNodes.push_back(nullptr);
+				nextLevelNodes.push_back(nullptr);
+			}
+		}
+
+		currentLevelNodes.swap(nextLevelNodes);
+		level++;
+	}
+}
+
+void BinaryTree::printVertical()
+{
+	printVertical(m_root);
+}
+
 void BinaryTree::printLevel(const int level)
 {
 	printLevel(m_root, level, 0);
@@ -471,14 +590,23 @@ void BinaryTree::printLevel(Node* startNode, const int level, const int currentL
 		{
 			cout << "Tree is empty" << endl;
 		}
-
+		else
+		{
+			cout << "X" << "   ";
+		}
 		return;
 	}
 
-	if (currentLevel == level)
+	if (startNode == nullptr)
 	{
-		cout << startNode->key << "    ";
+		cout << "X" << "    ";
 	}
+
+	if (currentLevel == level)
+	{	
+			cout << startNode->key << "    ";
+	}
+
 	else if (currentLevel < level)
 	{
 		printLevel(startNode->leftChild, level, currentLevel + 1);
